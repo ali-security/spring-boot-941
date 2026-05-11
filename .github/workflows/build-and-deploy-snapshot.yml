@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - '3.5.x'
+      - 3.5.x
 permissions:
   contents: read
 concurrency:
@@ -12,7 +12,7 @@ jobs:
   build-and-deploy-snapshot:
     name: Build and Deploy Snapshot
     if: ${{ github.repository == 'spring-projects/spring-boot' || github.repository == 'spring-projects/spring-boot-commercial' }}
-    runs-on: ${{ vars.UBUNTU_MEDIUM || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_MEDIUM || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6
@@ -31,7 +31,7 @@ jobs:
         uses: spring-io/artifactory-deploy-action@926d7f7cc810569395346bf3a4d91b380b3e355b # v0.0.4
         with:
           build-name: ${{ vars.COMMERCIAL && format('spring-boot-commercial-{0}', '3.5.x') || format('spring-boot-{0}', '3.5.x') }}
-          folder: 'deployment-repository'
+          folder: deployment-repository
           password: ${{ vars.COMMERCIAL && secrets.COMMERCIAL_ARTIFACTORY_PASSWORD || secrets.ARTIFACTORY_PASSWORD }}
           project: ${{ vars.COMMERCIAL && 'spring' }}
           repository: ${{ vars.COMMERCIAL && 'spring-enterprise-maven-dev-local' || 'libs-snapshot-local' }}
@@ -55,7 +55,7 @@ jobs:
     needs: build-and-deploy-snapshot
     permissions:
       actions: write
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Run Deploy Docs Workflow
         env:

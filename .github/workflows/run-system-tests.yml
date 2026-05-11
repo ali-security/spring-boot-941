@@ -2,14 +2,14 @@ name: Run System Tests
 on:
   push:
     branches:
-      - '3.5.x'
+      - 3.5.x
 permissions:
   contents: read
 jobs:
   run-system-tests:
-    name: 'Java ${{ matrix.java.version}}'
+    name: Java ${{ matrix.java.version}}
     if: ${{ github.repository == 'spring-projects/spring-boot' }}
-    runs-on: ${{ vars.UBUNTU_MEDIUM || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_MEDIUM || 'ubuntu-24.04' }}
     strategy:
       matrix:
         java:

@@ -1,4 +1,4 @@
-name: "Run CodeQL Analysis"
+name: Run CodeQL Analysis
 on:
   push:
   pull_request:

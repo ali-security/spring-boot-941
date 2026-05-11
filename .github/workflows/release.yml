@@ -11,7 +11,7 @@ jobs:
   build-and-stage-release:
     name: Build and Stage Release
     if: ${{ github.repository == 'spring-projects/spring-boot' || github.repository == 'spring-projects/spring-boot-commercial' }}
-    runs-on: ${{ vars.UBUNTU_MEDIUM || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_MEDIUM || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6
@@ -30,7 +30,7 @@ jobs:
         uses: spring-io/artifactory-deploy-action@926d7f7cc810569395346bf3a4d91b380b3e355b # v0.0.4
         with:
           build-name: ${{ vars.COMMERCIAL && format('spring-boot-commercial-{0}', steps.build-and-publish.outputs.version) || format('spring-boot-{0}', steps.build-and-publish.outputs.version) }}
-          folder: 'deployment-repository'
+          folder: deployment-repository
           password: ${{ vars.COMMERCIAL && secrets.COMMERCIAL_ARTIFACTORY_PASSWORD || secrets.ARTIFACTORY_PASSWORD }}
           project: ${{ vars.COMMERCIAL && 'spring' }}
           repository: ${{ vars.COMMERCIAL && 'spring-enterprise-maven-stage-local' || 'libs-staging-local' }}
@@ -68,7 +68,7 @@ jobs:
     needs:
       - build-and-stage-release
       - verify
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6
@@ -84,7 +84,7 @@ jobs:
     needs:
       - build-and-stage-release
       - sync-to-maven-central
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Set up JFrog CLI
         uses: jfrog/setup-jfrog-cli@86dacb6974c66cc99e7651e1205f6581aaddba9a # v4.10.0
@@ -102,7 +102,7 @@ jobs:
     needs:
       - build-and-stage-release
       - sync-to-maven-central
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6
@@ -119,7 +119,7 @@ jobs:
     needs:
       - build-and-stage-release
       - sync-to-maven-central
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6
@@ -135,7 +135,7 @@ jobs:
     needs:
       - build-and-stage-release
       - sync-to-maven-central
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6
@@ -151,7 +151,7 @@ jobs:
       - promote-release
     permissions:
       actions: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Run Deploy Docs Workflow
         env:
@@ -166,7 +166,7 @@ jobs:
       - publish-to-sdkman
       - trigger-docs-build
       - update-homebrew-tap
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Code
         uses: actions/checkout@v6

@@ -3,23 +3,23 @@ on:
   workflow_dispatch:
     inputs:
       build-number:
-        description: 'Number of the build to use to create the bundle'
+        description: Number of the build to use to create the bundle
         required: true
         type: string
       create-bundle:
-        description: 'Whether to create the bundle. If unchecked, only the bundle distribution is executed'
+        description: Whether to create the bundle. If unchecked, only the bundle distribution is executed
         required: true
         type: boolean
         default: true
       version:
-        description: 'Version to bundle and distribute'
+        description: Version to bundle and distribute
         required: true
         type: string
 permissions:
   contents: read
 jobs:
   distribute-spring-enterprise-release-bundle:
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Create Bundle
         if: ${{ vars.COMMERCIAL && inputs.create-bundle }}

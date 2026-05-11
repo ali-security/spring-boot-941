@@ -3,44 +3,44 @@ on:
   workflow_call:
     inputs:
       staging:
-        description: 'Whether the release to verify is in the staging repository'
+        description: Whether the release to verify is in the staging repository
         required: false
         default: false
         type: boolean
       version:
-        description: 'Version to verify'
+        description: Version to verify
         required: true
         type: string
     secrets:
       commercial-repository-password:
-        description: 'Password for authentication with the commercial repository'
+        description: Password for authentication with the commercial repository
         required: false
       commercial-repository-username:
-        description: 'Username for authentication with the commercial repository'
+        description: Username for authentication with the commercial repository
         required: false
       google-chat-webhook-url:
-        description: 'Google Chat Webhook URL'
+        description: Google Chat Webhook URL
         required: true
       opensource-repository-password:
-        description: 'Password for authentication with the open-source repository'
+        description: Password for authentication with the open-source repository
         required: false
       opensource-repository-username:
-        description: 'Username for authentication with the open-source repository'
+        description: Username for authentication with the open-source repository
         required: false
       token:
-        description: 'Token to use for authentication with GitHub'
+        description: Token to use for authentication with GitHub
         required: true
 permissions:
   contents: read
 jobs:
   verify:
     name: Verify
-    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-latest' }}
+    runs-on: ${{ vars.UBUNTU_SMALL || 'ubuntu-24.04' }}
     steps:
       - name: Check Out Release Verification Tests
         uses: actions/checkout@v6
         with:
-          ref: 'v0.0.15'
+          ref: v0.0.15
           repository: spring-projects/spring-boot-release-verification
           token: ${{ secrets.token }}
       - name: Check Out Send Notification Action
@@ -51,7 +51,7 @@ jobs:
       - name: Set Up Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'liberica'
+          distribution: liberica
           java-version: 17
       - name: Set Up Homebrew
         if: ${{ !vars.COMMERCIAL }}
@@ -79,7 +79,7 @@ jobs:
         run: ./gradlew spring-boot-release-verification-tests:test
       - name: Upload Build Reports on Failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: '**/build/reports/'
